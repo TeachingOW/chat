@@ -7,57 +7,55 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Server {
-    public static void main(String[] args){
-        final ServerSocket serverSocket ;
-        final Socket clientSocket ;
-        final BufferedReader in;
-        final PrintWriter out;
-        final Scanner sc=new Scanner(System.in);
+  public static void main(String[] args) {
+    final ServerSocket serverSocket;
+    final Socket clientSocket;
+    final BufferedReader in;
+    final PrintWriter out;
+    final Scanner keyboard = new Scanner(System.in);
 
-        try {
-            serverSocket = new ServerSocket(5000);
-            clientSocket = serverSocket.accept();
-            out = new PrintWriter(clientSocket.getOutputStream());
-            in = new BufferedReader (new InputStreamReader(clientSocket.getInputStream()));
+    try {
+      serverSocket = new ServerSocket(5000);
+      clientSocket = serverSocket.accept();
+      out = new PrintWriter(clientSocket.getOutputStream());
+      in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 
-            Thread sender= new Thread(new Runnable() {
-                String msg; 
-                @Override   
-                public void run() {
-                    while(true){
-                        msg = keyboard.nextLine(); 
-                        out.println(msg);    
-                        out.flush();   
-                    }
-                }
-            });
-            sender.start();
-
-            Thread receive= new Thread(new Runnable() {
-                String msg ;
-                @Override
-                public void run() {
-                    try {
-                        msg = in.readLine();
-   
-                        while(msg!=null){
-                            System.out.println("Client : "+msg);
-                            msg = in.readLine();
-                        }
-
-                        out.close();
-                        clientSocket.close();
-                        serverSocket.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-            receive.start();
-        } catch (IOException e) {
-            e.printStackTrace();
+      Thread sender = new Thread(new Runnable() {
+        String msg;
+        @Override
+        public void run() {
+          while (true) {
+            msg = keyboard.nextLine();
+            out.println(msg);
+            out.flush();
+          }
         }
+      });
+      sender.start();
 
+      Thread receive = new Thread(new Runnable() {
+        String msg;
+        @Override
+        public void run() {
+          try {
+            msg = in.readLine();
 
+            while (msg != null) {
+              System.out.println("Client : " + msg);
+              msg = in.readLine();
+            }
+
+            out.close();
+            clientSocket.close();
+            serverSocket.close();
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        }
+      });
+      receive.start();
+    } catch (IOException e) {
+      e.printStackTrace();
     }
+  }
 }
