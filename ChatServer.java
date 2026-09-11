@@ -13,6 +13,8 @@ public class ChatServer {
 
         try (ServerSocket serverSocket = new ServerSocket(5000)) {
             while (true) {
+
+                System.out.println(InetAddress.getLocalHost());
                 // Accept new client connection
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("New client connected: " + clientSocket);
@@ -60,7 +62,7 @@ public class ChatServer {
                 while ((msg = in.readLine()) != null) {
                     System.out.println("Received: " + msg);
                     // Broadcast to other clients
-                    Server.broadcast("Client says: " + msg, out);
+                    ChatServer.broadcast("Client says: " + msg, out);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
