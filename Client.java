@@ -12,7 +12,9 @@ public class Client {
     PrintWriter out;
     Scanner keyboard = new Scanner(System.in);
     try {
-      clientSocket = new Socket("127.0.0.1", 5000);
+      System.out.println(args[0]);
+      clientSocket = new Socket(args[0], 5000);
+
       out = new PrintWriter(clientSocket.getOutputStream());
       in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
       Thread sender = new Thread(new Runnable() {
